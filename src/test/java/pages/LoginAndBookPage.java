@@ -8,6 +8,8 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 
 import javax.swing.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class LoginAndBookPage {
@@ -87,6 +89,9 @@ public class LoginAndBookPage {
     @FindBy(xpath = "//*[@id=\"cart_navigation\"]/button")
     private WebElement confirmPayment;
 
+    @FindBy(xpath = "//*[@id=\"center_column\"]/div[1]/p[1]/strong")
+    private WebElement newAddressAdded;
+
     public LoginAndBookPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
     }
@@ -129,7 +134,7 @@ public class LoginAndBookPage {
         confirmPayment.click();
     }
 
-    public void roomCheckout(String street, String code, String city, String phone, String refName){
+    public void addNewAddress(String street, String code, String city, String phone, String refName){
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -145,12 +150,20 @@ public class LoginAndBookPage {
         phoneNumber.sendKeys(phone);
         addressRef.click();
         addressRef.clear();
-        addressRef.sendKeys(refName);
+        addressRef.sendKeys(refName + addTimeStamp());
         buttonSave.click();
     }
 
     public String confirmedBookedMessage() {
         return confirmMessage.getText();
+    }
+
+    public String addressAddedConfirmation(){
+        return newAddressAdded.getText();
+    }
+    public static String addTimeStamp(){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh.mm.ss");
+        return simpleDateFormat.format(new Date());
     }
 
 }
